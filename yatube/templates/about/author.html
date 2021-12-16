@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+
+<div class="container">
+    <h1>Привет, меня зовут Александр</h1>
+    <p>Мое резюме можно посмотреть <a href="">тут</a></p>
+    <hr>
+    <p>Это мой первый проект на Django он размещен на <a href="https://github.com/SashaAhrom">Github</a></p>
+    <br>
+    <p>Программирование мне нравилось с института но переучится и сменить работу я решился только в 2020 году. До этого я работая инженером-конструкторам</p>
+    {% load static %}
+        <a class="navbar-brand" href="{% url 'about:tech' %}" title="Технологии">
+        <img src={% static "img/about/tech.jpeg" %} width="100" height="100" class="d-inline-block align-top" alt=""></a>
+         </a>
+    </div>
+{% endblock %} 
