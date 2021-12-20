@@ -5,7 +5,7 @@
         <h1>Все посты пользователя {{ author.get_full_name }} </h1>
 
         <h3>Всего постов: {{ post_list|length }} </h3>
-            {% if following %}
+            {% if following|length %}
                 <a
                         class="btn btn-lg btn-light"
                         href="{% url 'posts:profile_unfollow' author.username %}" role="button"

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import CommentForm, PostForm
@@ -43,7 +44,7 @@ def profile(request, username):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     title = f'Профайл пользователя {author}'
-    following = author.following.count()
+    following = author.following.all()
     context = {
         'post_list': post_list,
         'page_obj': page_obj,
@@ -140,10 +141,13 @@ def profile_follow(request, username):
     """Add subscription."""
     user = request.user
     author = get_object_or_404(User, username=username)
-    Follow.objects.create(
-        user=user,
-        author=author
-    ).save()
+    try:
+        Follow.objects.create(
+            user=user,
+            author=author
+        ).save()
+    except IntegrityError:
+        return redirect('posts:follow_index')
     return redirect('posts:follow_index')
 
 
@@ -151,5 +155,6 @@ def profile_follow(request, username):
 def profile_unfollow(request, username):
     """Delete subscription."""
     author = get_object_or_404(User, username=username)
+    get_object_or_404(Follow, user=request.user, author=author)
     Follow.objects.filter(user=request.user, author=author).delete()
     return redirect('posts:follow_index')

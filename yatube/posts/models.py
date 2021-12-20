@@ -92,15 +92,12 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'subscriptions'
         db_table = 'author subscriptions'
-        unique_together = ['user', 'author']
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'],
+                                    name='unique_subscription'),
+            models.CheckConstraint(check=~models.Q(author=models.F('user')),
+                                   name='not_subscription_by_myself'),
+        ]
 
     def __str__(self):
         return f'{self.user} subscribed to {self.author}'
-
-    def save(self, *args, **kwargs):
-        in_base = Follow.objects.filter(user=self.user,
-                                        author=self.author).count()
-        if self.user == self.author or in_base:
-            return
-        else:
-            super().save(*args, **kwargs)
