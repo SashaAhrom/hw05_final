@@ -35,7 +35,7 @@ class PostModelTest(TestCase):
             self.post: self.post.text[:15],
             self.group: self.group.title,
             self.comment: self.comment.text[:15],
-            self.follow: f'{self.follow.user} subscribed to'
+            self.follow: f'{self.follow.user} subscribed to '
                          f'{self.follow.author}'
         }
         for model, expected_value in object_names.items():
